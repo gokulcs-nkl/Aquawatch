@@ -591,20 +591,28 @@ hr, [data-testid="stDecoration"] {
     outline-offset: 2px;
     box-shadow: 0 0 0 3px rgba(255,215,0,0.3);
 }}
-/* Skip-to-content link (screen readers) */
+/* Skip-to-content link (screen readers only) */
 .skip-link {{
-    position: absolute;
-    top: -100px;
-    left: 0;
+    position: fixed !important;
+    top: -9999px !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
     background: var(--accent);
-    color: white;
+    color: white !important;
     padding: 8px 16px;
-    z-index: 10000;
+    z-index: 99999;
     font-weight: 600;
-    transition: top 0.2s;
+    text-decoration: none;
+    border-radius: 0 0 4px 0;
 }}
 .skip-link:focus {{
-    top: 0;
+    top: 0 !important;
+    left: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    overflow: visible !important;
 }}
 
 /* ── Mobile Responsiveness ───────────────────────────────── */
