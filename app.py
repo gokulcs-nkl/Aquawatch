@@ -77,31 +77,26 @@ except ImportError:
     pass  # streamlit-autorefresh not installed — manual refresh only
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CSS — Dynamic theme (Light / Dark mode) + Mobile + Accessibility
+# CSS — Theme + Mobile + Accessibility
 # ─────────────────────────────────────────────────────────────────────────────
-_dark = st.session_state.get("dark_mode", False)
-_plotly_bg = "#1a1a2e" if _dark else "white"
-_plotly_grid = "#2a2a4a" if _dark else "#f0f0f0"
-_plotly_font_color = "#e0e0e0" if _dark else None
-
 _theme_css = f"""
 <style>
 /* ── Theme Variables ─────────────────────────────────────── */
 :root {{
-    --bg-primary: {'#1a1a2e' if _dark else '#f0f4f8'};
-    --bg-secondary: {'#16213e' if _dark else '#ffffff'};
-    --bg-card: {'#1a1a2e' if _dark else '#f8fafc'};
-    --text-primary: {'#e0e0e0' if _dark else '#0b3d91'};
-    --text-secondary: {'#b0b0b0' if _dark else '#555555'};
-    --text-muted: {'#888' if _dark else '#888'};
-    --border-color: {'#2a2a4a' if _dark else '#e2e8f0'};
-    --accent: {'#4fc3f7' if _dark else '#0072C6'};
-    --accent-hover: {'#29b6f6' if _dark else '#005a9e'};
-    --card-border: {'#333366' if _dark else '#3498db'};
-    --sidebar-bg: {'linear-gradient(180deg, #16213e 0%, #0f3460 100%)' if _dark else 'linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%)'};
-    --tag-bg: {'#1a1a4e' if _dark else '#eaf4ff'};
-    --tag-color: {'#81d4fa' if _dark else '#1e6bb8'};
-    --tag-border: {'#333366' if _dark else '#c3ddf7'};
+    --bg-primary: #f0f4f8;
+    --bg-secondary: #ffffff;
+    --bg-card: #f8fafc;
+    --text-primary: #0b3d91;
+    --text-secondary: #555555;
+    --text-muted: #888;
+    --border-color: #e2e8f0;
+    --accent: #0072C6;
+    --accent-hover: #005a9e;
+    --card-border: #3498db;
+    --sidebar-bg: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+    --tag-bg: #eaf4ff;
+    --tag-color: #1e6bb8;
+    --tag-border: #c3ddf7;
 }}
 
 /* ── Base Theme ──────────────────────────────────────────── */
@@ -212,374 +207,6 @@ hr {{ border-color: var(--border-color) !important; }}
     color: white !important;
 }}
 
-/* ── Dark mode overrides ─────────────────────────────────── */
-{''.join(['''
-/* --- App container & header --- */
-[data-testid="stAppViewContainer"] {
-    background-color: #1a1a2e !important;
-}
-[data-testid="stHeader"] {
-    background-color: #1a1a2e !important;
-}
-.main .block-container {
-    background-color: #1a1a2e !important;
-}
-
-/* --- Global text --- */
-.stMarkdown, .stCaption, p, span, li, td, th, label, div {
-    color: #e0e0e0 !important;
-}
-h1, h2, h3, h4, h5, h6 {
-    color: #f0f0f0 !important;
-}
-
-/* --- Metrics --- */
-[data-testid="stMetricValue"] {
-    color: #ffffff !important;
-}
-[data-testid="stMetricLabel"] label {
-    color: #b0b0b0 !important;
-}
-[data-testid="stMetricDelta"] {
-    color: #81d4fa !important;
-}
-
-/* --- Sidebar --- */
-[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #16213e 0%, #0f3460 100%) !important;
-}
-[data-testid="stSidebar"] * {
-    color: #d0d0f0 !important;
-}
-[data-testid="stSidebar"] .stMarkdown p,
-[data-testid="stSidebar"] .stMarkdown span,
-[data-testid="stSidebar"] .stMarkdown li,
-[data-testid="stSidebar"] .stMarkdown label,
-[data-testid="stSidebar"] .stMarkdown h1,
-[data-testid="stSidebar"] .stMarkdown h2,
-[data-testid="stSidebar"] .stMarkdown h3 {
-    color: #e0e0ff !important;
-}
-[data-testid="stSidebar"] hr {
-    border-color: #3a3a6a !important;
-    opacity: 0.6;
-}
-
-/* --- Radio buttons --- */
-[data-testid="stRadio"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stRadio"] div[role="radiogroup"] label {
-    color: #d0d0f0 !important;
-}
-[data-testid="stRadio"] div[role="radiogroup"] label span {
-    color: #d0d0f0 !important;
-}
-[data-testid="stRadio"] div[role="radiogroup"] label div[data-testid="stMarkdownContainer"] p {
-    color: #d0d0f0 !important;
-}
-[data-testid="stSidebar"] [data-testid="stRadio"] label {
-    color: #e0e0ff !important;
-}
-[data-testid="stSidebar"] [data-testid="stRadio"] div[role="radiogroup"] label {
-    color: #e0e0ff !important;
-}
-
-/* --- Text inputs --- */
-[data-testid="stTextInput"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stTextInput"] input {
-    background-color: #16213e !important;
-    color: #e0e0e0 !important;
-    border-color: #3a3a6a !important;
-}
-[data-testid="stTextInput"] input::placeholder {
-    color: #666699 !important;
-}
-[data-testid="stSidebar"] [data-testid="stTextInput"] input {
-    background-color: #0f2847 !important;
-    color: #e0e0ff !important;
-    border-color: #3a3a6a !important;
-}
-
-/* --- Number inputs --- */
-[data-testid="stNumberInput"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stNumberInput"] input {
-    background-color: #16213e !important;
-    color: #e0e0e0 !important;
-    border-color: #3a3a6a !important;
-}
-[data-testid="stSidebar"] [data-testid="stNumberInput"] input {
-    background-color: #0f2847 !important;
-    color: #e0e0ff !important;
-    border-color: #3a3a6a !important;
-}
-[data-testid="stNumberInput"] button {
-    background-color: #16213e !important;
-    color: #e0e0e0 !important;
-    border-color: #3a3a6a !important;
-}
-
-/* --- Selectbox --- */
-[data-testid="stSelectbox"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #16213e !important;
-    border-color: #3a3a6a !important;
-}
-[data-testid="stSelectbox"] div[data-baseweb="select"] * {
-    color: #e0e0e0 !important;
-    background-color: transparent !important;
-}
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-    background-color: #16213e !important;
-}
-[data-testid="stSidebar"] [data-testid="stSelectbox"] div[data-baseweb="select"] {
-    background-color: #0f2847 !important;
-}
-[data-testid="stSidebar"] [data-testid="stSelectbox"] div[data-baseweb="select"] > div {
-    background-color: #0f2847 !important;
-}
-/* Selectbox dropdown menu */
-div[data-baseweb="popover"] {
-    background-color: #16213e !important;
-    border-color: #3a3a6a !important;
-}
-div[data-baseweb="popover"] li {
-    background-color: #16213e !important;
-    color: #e0e0e0 !important;
-}
-div[data-baseweb="popover"] li:hover {
-    background-color: #1e2d50 !important;
-}
-div[data-baseweb="menu"] {
-    background-color: #16213e !important;
-}
-
-/* --- Multiselect --- */
-[data-testid="stMultiSelect"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stMultiSelect"] div[data-baseweb="select"] {
-    background-color: #16213e !important;
-    border-color: #3a3a6a !important;
-}
-[data-testid="stMultiSelect"] div[data-baseweb="select"] * {
-    color: #e0e0e0 !important;
-}
-
-/* --- Sliders --- */
-[data-testid="stSlider"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stSlider"] div[data-testid="stThumbValue"] {
-    color: #e0e0e0 !important;
-}
-[data-testid="stSlider"] div[data-baseweb="slider"] div {
-    color: #e0e0e0 !important;
-}
-[data-testid="stSidebar"] [data-testid="stSlider"] label {
-    color: #e0e0ff !important;
-}
-
-/* --- Toggle --- */
-.stToggle label, .stToggle span {
-    color: #e0e0e0 !important;
-}
-[data-testid="stSidebar"] .stToggle label,
-[data-testid="stSidebar"] .stToggle span {
-    color: #e0e0ff !important;
-}
-
-/* --- Expander --- */
-[data-testid="stExpander"] {
-    background: #16213e !important;
-    border-color: #2a2a4a !important;
-    border-radius: 8px !important;
-}
-[data-testid="stExpander"] summary {
-    color: #e0e0e0 !important;
-}
-[data-testid="stExpander"] summary span {
-    color: #e0e0e0 !important;
-}
-[data-testid="stExpander"] summary svg {
-    fill: #e0e0e0 !important;
-}
-[data-testid="stExpander"] div[data-testid="stExpanderDetails"] {
-    background-color: #16213e !important;
-}
-[data-testid="stSidebar"] [data-testid="stExpander"] {
-    background: #0f2847 !important;
-    border-color: #3a3a6a !important;
-}
-
-/* --- Tabs --- */
-.stTabs [data-baseweb="tab-list"] {
-    background-color: transparent !important;
-    border-bottom-color: #3a3a6a !important;
-}
-.stTabs [data-baseweb="tab"] {
-    color: #b0b0d0 !important;
-    background-color: transparent !important;
-}
-.stTabs [data-baseweb="tab"][aria-selected="true"] {
-    color: #4fc3f7 !important;
-    border-bottom-color: #4fc3f7 !important;
-}
-.stTabs [data-baseweb="tab"]:hover {
-    color: #e0e0e0 !important;
-    background-color: rgba(255,255,255,0.05) !important;
-}
-.stTabs [data-baseweb="tab-panel"] {
-    background-color: transparent !important;
-}
-
-/* --- Alert boxes (success, info, warning, error) --- */
-[data-testid="stAlert"] {
-    border-radius: 8px !important;
-}
-div[data-testid="stAlert"][data-baseweb*="notification"] {
-    background-color: rgba(22, 33, 62, 0.8) !important;
-}
-/* Success */
-.stSuccess, div.stAlert:has(> div[role="alert"]) {
-    background-color: rgba(46, 204, 113, 0.15) !important;
-    border-left: 4px solid #2ecc71 !important;
-}
-.stSuccess p, .stSuccess span, .stSuccess div {
-    color: #7dffb3 !important;
-}
-.element-container:has(.stSuccess) .stSuccess,
-div[data-baseweb="notification"][kind="positive"],
-div[data-baseweb="notification"][kind="positive"] div {
-    background-color: rgba(46, 204, 113, 0.15) !important;
-    color: #7dffb3 !important;
-}
-/* Info */
-.stInfo {
-    background-color: rgba(79, 195, 247, 0.15) !important;
-    border-left: 4px solid #4fc3f7 !important;
-}
-.stInfo p, .stInfo span, .stInfo div {
-    color: #b3e5fc !important;
-}
-/* Warning */
-.stWarning {
-    background-color: rgba(241, 196, 15, 0.15) !important;
-    border-left: 4px solid #f1c40f !important;
-}
-.stWarning p, .stWarning span, .stWarning div {
-    color: #fff3b3 !important;
-}
-/* Error */
-.stError {
-    background-color: rgba(231, 76, 60, 0.15) !important;
-    border-left: 4px solid #e74c3c !important;
-}
-.stError p, .stError span, .stError div {
-    color: #ffb3b0 !important;
-}
-
-/* --- DataFrames & Tables --- */
-.stDataFrame, .stTable {
-    background: #16213e !important;
-}
-[data-testid="stDataFrame"] * {
-    color: #e0e0e0 !important;
-}
-[data-testid="stDataFrame"] [data-testid="glideDataEditor"] {
-    background-color: #16213e !important;
-}
-.stDataFrame th {
-    background-color: #0f2847 !important;
-    color: #e0e0ff !important;
-}
-.stDataFrame td {
-    background-color: #16213e !important;
-    color: #e0e0e0 !important;
-}
-
-/* --- Dividers --- */
-hr, [data-testid="stDecoration"] {
-    border-color: #3a3a6a !important;
-}
-.main hr {
-    border-color: #3a3a6a !important;
-}
-
-/* --- Download button Dark mode --- */
-.stDownloadButton>button {
-    background-color: #00805a !important;
-    color: white !important;
-    border-color: #00805a !important;
-}
-.stDownloadButton>button:hover {
-    background-color: #009e70 !important;
-}
-
-/* --- Plotly charts --- */
-.js-plotly-plot .plotly .main-svg {
-    background: transparent !important;
-}
-
-/* --- Caption text --- */
-.stCaption, [data-testid="stCaptionContainer"] {
-    color: #888 !important;
-}
-
-/* --- Tooltip / popovers --- */
-[data-baseweb="tooltip"] {
-    background-color: #1a1a2e !important;
-    color: #e0e0e0 !important;
-}
-
-/* --- Form submit button --- */
-[data-testid="stFormSubmitButton"] button {
-    background-color: #4fc3f7 !important;
-    color: #1a1a2e !important;
-}
-
-/* --- Checkbox --- */
-[data-testid="stCheckbox"] label {
-    color: #e0e0e0 !important;
-}
-[data-testid="stSidebar"] [data-testid="stCheckbox"] label {
-    color: #e0e0ff !important;
-}
-
-/* --- Columns borders if any --- */
-[data-testid="column"] {
-    border-color: #2a2a4a !important;
-}
-
-/* --- Code blocks --- */
-.stCodeBlock, code, pre {
-    background-color: #0f1a2e !important;
-    color: #81d4fa !important;
-}
-
-/* --- Scrollbar dark --- */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #1a1a2e;
-}
-::-webkit-scrollbar-thumb {
-    background: #3a3a6a;
-    border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #5050a0;
-}
-''' if _dark else ''])}
-
 /* ── Accessibility — Focus & High Contrast ───────────────── */
 *:focus-visible {{
     outline: 3px solid var(--accent) !important;
@@ -668,7 +295,7 @@ hr, [data-testid="stDecoration"] {
 
 /* ── Onboarding overlay ──────────────────────────────────── */
 .onboarding-overlay {{
-    background: {'rgba(0,0,0,0.7)' if _dark else 'rgba(255,255,255,0.97)'};
+    background: rgba(255,255,255,0.97);
     border: 2px solid var(--accent);
     border-radius: 14px;
     padding: 28px 32px;
@@ -728,13 +355,13 @@ def _build_who_bar(cells_per_ml: int, thresholds: list, risk_color: str):
         hovertemplate="<b>%{x}</b>: %{y:,.0f} cells/mL<extra></extra>",
     ))
     fig.update_layout(
-        yaxis=dict(type="log", title="cells/mL (log scale)", gridcolor=_plotly_grid),
+        yaxis=dict(type="log", title="cells/mL (log scale)", gridcolor="#f0f0f0"),
         xaxis=dict(title=""),
         height=220,
         margin=dict(l=10, r=10, t=10, b=20),
-        paper_bgcolor=_plotly_bg,
-        plot_bgcolor=_plotly_bg,
-        font=dict(family="Inter, sans-serif", size=11, color=_plotly_font_color),
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        font=dict(family="Inter, sans-serif", size=11),
         showlegend=False,
     )
     return fig
@@ -940,8 +567,6 @@ if "map_lat" not in st.session_state:
     st.session_state["map_lat"] = None
 if "map_lon" not in st.session_state:
     st.session_state["map_lon"] = None
-if "dark_mode" not in st.session_state:
-    st.session_state["dark_mode"] = False
 if "show_onboarding" not in st.session_state:
     st.session_state["show_onboarding"] = True
 if "custom_thresholds" not in st.session_state:
@@ -1092,14 +717,8 @@ with st.sidebar:
 
     st.divider()
 
-    # ── Dark Mode Toggle ────────────────────────────────────────────────
-    st.markdown("**⚙️ Settings**")
-    dark_toggle = st.toggle("🌙 Dark Mode", value=st.session_state.get("dark_mode", False), key="dark_mode_toggle")
-    if dark_toggle != st.session_state.get("dark_mode", False):
-        st.session_state["dark_mode"] = dark_toggle
-        st.rerun()
-
     # ── Customization — Thresholds & Weights ────────────────────────────
+    st.markdown("**⚙️ Settings**")
     with st.expander("🎛️ Customize Thresholds & Weights", expanded=False):
         st.caption("Adjust risk thresholds and model weights for your local conditions.")
         ct = st.session_state["custom_thresholds"]
@@ -1158,7 +777,7 @@ if st.session_state.get("show_onboarding", True):
         </div>
         <div class="onboarding-step">
             <div class="step-num">5</div>
-            <div><b>Dark Mode & Settings</b> — Toggle dark mode and customize model weights under <b>⚙️ Settings</b> in the sidebar.</div>
+            <div><b>Settings</b> — Customize model weights and thresholds under <b>⚙️ Settings</b> in the sidebar.</div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1425,7 +1044,7 @@ with map_col:
 
 with score_col:
     st.subheader("📊 Overall Risk")
-    st.plotly_chart(build_risk_gauge(risk_score, dark=_dark), width='stretch', config={"displayModeBar": False})
+    st.plotly_chart(build_risk_gauge(risk_score), width='stretch', config={"displayModeBar": False})
 
     # Polar risk gauge (scatter_polar) — from consolidated code
     import plotly.graph_objects as go
@@ -1446,13 +1065,13 @@ with score_col:
         height=180,
         margin=dict(l=30, r=30, t=20, b=20),
         showlegend=False,
-        paper_bgcolor=_plotly_bg,
-        font=dict(color=_plotly_font_color),
+        paper_bgcolor="white",
+        font=dict(),
     )
     st.plotly_chart(polar_fig, width='stretch', config={"displayModeBar": False})
 
     st.subheader("Component Scores")
-    st.plotly_chart(build_component_bar(comp, dark=_dark), width='stretch', config={"displayModeBar": False})
+    st.plotly_chart(build_component_bar(comp), width='stretch', config={"displayModeBar": False})
 
     # Factor tags
     all_factors = []
@@ -1497,14 +1116,13 @@ with heat_col:
         water_temp=fv.get("water_temp", 20.0),
         water_temp_source=wt_source,
         source_detail=wt_source_detail,
-        dark=_dark,
     )
     st.plotly_chart(fig_heat, width='stretch', config={"displayModeBar": False})
 
 with timeline_col:
     sat_7d = temp_info.get("satellite_skin_7d", [])
     sat_dates = temp_info.get("satellite_skin_dates", [])
-    fig_timeline = build_temp_timeline(sat_7d, sat_dates, wt_source, dark=_dark)
+    fig_timeline = build_temp_timeline(sat_7d, sat_dates, wt_source)
     if fig_timeline:
         st.plotly_chart(fig_timeline, width='stretch', config={"displayModeBar": False})
     else:
@@ -1599,9 +1217,9 @@ st.divider()
 st.subheader("🔬 Biological Growth Rate (Monod Kinetics)")
 gauge_col, monod_col = st.columns([1, 1.5], gap="medium")
 with gauge_col:
-    st.plotly_chart(build_component_gauges(comp, dark=_dark), width='stretch', config={"displayModeBar": False})
+    st.plotly_chart(build_component_gauges(comp), width='stretch', config={"displayModeBar": False})
 with monod_col:
-    st.plotly_chart(build_monod_factors_chart(gr, dark=_dark), width='stretch', config={"displayModeBar": False})
+    st.plotly_chart(build_monod_factors_chart(gr), width='stretch', config={"displayModeBar": False})
 
 lim = gr.get("limiting_factor", "Unknown")
 bio_traj = gr.get("biomass_trajectory", [1.0])
@@ -1618,7 +1236,7 @@ st.divider()
 # ─────────────────────────────────────────────────────────────────────────────
 st.subheader("📈 7-Day Risk Forecast")
 st.plotly_chart(
-    build_forecast_chart(forecast, dark=_dark),
+    build_forecast_chart(forecast),
     width='stretch',
     config={"displayModeBar": False},
 )
@@ -1840,10 +1458,10 @@ with tab_trend:
             fig_hourly.update_layout(
                 height=320,
                 margin=dict(l=10, r=10, t=40, b=20),
-                paper_bgcolor=_plotly_bg, plot_bgcolor=_plotly_bg,
-                font=dict(family="Segoe UI, sans-serif", size=11, color=_plotly_font_color),
-                yaxis=dict(gridcolor=_plotly_grid),
-                xaxis=dict(gridcolor=_plotly_grid),
+                paper_bgcolor="white", plot_bgcolor="white",
+                font=dict(family="Segoe UI, sans-serif", size=11),
+                yaxis=dict(gridcolor="#f0f0f0"),
+                xaxis=dict(gridcolor="#f0f0f0"),
             )
             st.plotly_chart(fig_hourly, use_container_width=True)
 
@@ -1857,8 +1475,8 @@ with tab_trend:
             fig_trend_24.update_layout(
                 height=280,
                 margin=dict(l=10, r=10, t=40, b=20),
-                paper_bgcolor=_plotly_bg, plot_bgcolor=_plotly_bg,
-                font=dict(color=_plotly_font_color),
+                paper_bgcolor="white", plot_bgcolor="white",
+                font=dict(),
             )
             st.plotly_chart(fig_trend_24, use_container_width=True)
 
@@ -2062,8 +1680,8 @@ with ml_col3:
     fig_imp.update_layout(
         height=250, margin=dict(l=10, r=10, t=10, b=10),
         yaxis=dict(autorange="reversed"),
-        paper_bgcolor=_plotly_bg, plot_bgcolor=_plotly_bg,
-        font=dict(size=10, color=_plotly_font_color),
+        paper_bgcolor="white", plot_bgcolor="white",
+        font=dict(size=10),
     )
     st.plotly_chart(fig_imp, use_container_width=True)
 
@@ -2082,8 +1700,8 @@ with st.expander("📊 Confusion Matrix & Classification Report", expanded=False
             title="Confusion Matrix", height=300,
             xaxis_title="Predicted", yaxis_title="Actual",
             margin=dict(l=10, r=10, t=40, b=10),
-            paper_bgcolor=_plotly_bg,
-            font=dict(color=_plotly_font_color),
+            paper_bgcolor="white",
+            font=dict(),
         )
         st.plotly_chart(fig_cm, use_container_width=True)
     with rep_col:
@@ -2400,8 +2018,8 @@ st.divider()
 # ⑱  DATA PROVENANCE & TRANSPARENCY
 # ═══════════════════════════════════════════════════════════════════════════════
 with st.expander("🔍 Data Provenance & Transparency", expanded=False):
-    _card_bg = '#16213e' if _dark else '#f8fafc'
-    _card_border = '#2a2a4a' if _dark else '#e2e8f0'
+    _card_bg = '#f8fafc'
+    _card_border = '#e2e8f0'
     st.markdown(f"""
     <div style="background:{_card_bg};border:1px solid {_card_border};border-radius:10px;
         padding:20px 24px;line-height:2.0;font-size:0.88rem;">
